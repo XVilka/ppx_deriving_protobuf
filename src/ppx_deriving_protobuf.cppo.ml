@@ -140,7 +140,11 @@ let describe_error error =
       | `Packed   -> "packed", "[@packed]"
     in
     errorf ~loc "@%s attribute syntax is invalid: expected %s" name expectation
+#if OCAML_VERSION >= (4, 08, 0)
+  | Pberr_wrong_attr ({ txt; loc }; _; _) ->
+#else
   | Pberr_wrong_attr ({ txt; loc }, _) ->
+#endif
     errorf ~loc "Attribute @%s is not recognized here" txt
   | Pberr_no_key loc ->
     errorf ~loc "Type specification must include a key attribute, e.g. int [@key 42]"
